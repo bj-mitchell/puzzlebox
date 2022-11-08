@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using static UnityEditor.ObjectChangeEventStream;
 
 public class LightsController : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class LightsController : MonoBehaviour
 
     private TcpConfig tcpConfig;
     private SimpleWebClient client;
+    private UriBuilder builder;
 
     // Start is called before the first frame update
     void Start()
@@ -26,7 +28,7 @@ public class LightsController : MonoBehaviour
         client.onData += Client_onData;
         client.onError += Client_onError;
 
-        var builder = new UriBuilder
+        builder = new UriBuilder
         {
             Scheme = scheme,
             Host = host,
@@ -49,6 +51,10 @@ public class LightsController : MonoBehaviour
         string message = System.Text.Encoding.Default.GetString(obj);
         Debug.Log("onData: " + message);
 
+        var light = Array.Find(lights, element => element.Character == message[0]);
+
+        light.State = !light.State;
+
         //throw new NotImplementedException();
     }
 
@@ -56,6 +62,7 @@ public class LightsController : MonoBehaviour
     {
         Debug.Log("onDisconnect...");
         //throw new NotImplementedException();
+        client.Connect(builder.Uri);
     }
 
     private void Client_onConnect()

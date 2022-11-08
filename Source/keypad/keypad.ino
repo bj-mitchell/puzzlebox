@@ -1,15 +1,20 @@
-//#include <Wire.h>
+#include <Wire.h>
 
-//#define SLAVE_ADDRESS 0x2a
+#define SLAVE_ADDRESS 0x2a
 
 const int selectPins[3] = {2, 3, 4}; // S0~2, S1~3, S2~4
 const int zOutput = 5; 
 const int zInput = A0; // Connect common (Z) to A0 (analog input)
 const int KEY_COUNT = 16;
 const int PIN_COUNT = 8;
+const int IRQ_PIN = 7;
 
 const int PIN_HIGH = 800;
 const int PIN_LOW = 0;
+
+char key_mapping[] = {'1', '2', '3', 'A', '4', '5', '6', 'B', '7', '8', '9', 'C', '*', '0', '#', 'D'};
+
+char current_keypress = "";
 
 //bool state[KEY_COUNT];
 bool keys[KEY_COUNT];
@@ -17,9 +22,8 @@ bool pins[PIN_COUNT];
 
 void setup() 
 {
-  //Wire.begin(SLAVE_ADDRESS);
-  //Wire.onRequest(requestEvent);
-  Serial.begin(9600); // Initialize the serial port
+  pinMode(IRQ_PIN, OUTPUT);
+
   // Set up the select pins as outputs:
   for (int i=0; i<3; i++)
   {
@@ -35,6 +39,11 @@ void setup()
   for (int i=0; i < PIN_COUNT; i++) {
     pins[PIN_COUNT] = false;
   }
+
+  Wire.begin(SLAVE_ADDRESS);
+  Wire.onRequest(requestEvent);
+  //Wire.onReceive(receiveEvent);
+  Serial.begin(9600); // Initialize the serial port
 }
 
 void loop() 
@@ -60,13 +69,13 @@ void loop()
     }
   } 
 
-  char keys[] = {'1', '2', '3', 'A', '4', '5', '6', 'B', '7', '8', '9', 'C', '*', '0', '#', 'D'};
+  
   
   int index = 0;
   
   for (int row = 0; row < 4; row++) {
     for (int column = 4; column < 8; column++) {
-      sendEvent(row, column, index, keys[index]);
+      searchForKeypress(row, column, index, key_mapping[index]);
       index++;
     }
   }
@@ -87,10 +96,17 @@ void selectMuxPin(byte pin)
   }
 }
 
-void sendEvent(int row, int column, int index, char key) {
+void searchForKeypress(int row, int column, int index, char key) {
   if ((pins[row] && pins[column]) && !keys[index]) {
     keys[index] = true;
-    Serial.println("{'type': 'keypad', 'keypush': '" + String(key) + "'}");
+
+    current_keypress = char(key);
+    digitalWrite(IRQ_PIN, HIGH);
+    //delay(50);
+    //digitalWrite(IRQ_PIN, LOW);
+
+    //Serial.println("{'type': 'keypad', 'keypush': '" + String(key) + "'}");
+    Serial.println(current_keypress);
     //Wire.beginTransmission(SLAVE_ADDRESS);
     //Wire.write("kp;" + key);
     //Wire.endTransmission();
@@ -101,7 +117,9 @@ void sendEvent(int row, int column, int index, char key) {
   }
 }
 
-/*void requestEvent() {
-  Wire.write("hello "); // respond with message of 6 bytes
+void requestEvent() {
+  Wire.write(current_keypress);
+  digitalWrite(IRQ_PIN, LOW);
+  //Wire.write("hello "); // respond with message of 6 bytes
   // as expected by master
-}*/
+}
