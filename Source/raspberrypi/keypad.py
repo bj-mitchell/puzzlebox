@@ -4,7 +4,7 @@ import websockets
 import asyncio
 import RPi.GPIO as GPIO
 import smbus
-#import time
+import time
 #import sys
 #import serial
 
@@ -12,8 +12,10 @@ import smbus
 I2C_BUS = 1
 I2C_SLAVE = 0x2a
 INTERRUPT_PIN = 17
+RESET_PIN = 18
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(INTERRUPT_PIN, GPIO.IN)
+GPIO.setup(RESET_PIN, GPIO.OUT)
 i2c = smbus.SMBus(I2C_BUS)
 
 PORT = 7777
@@ -23,6 +25,13 @@ PORT = 7777
 
 #ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
 #ser.reset_input_buffer()
+
+print("Resetting devices...")
+GPIO.output(RESET_PIN, 1)
+time.sleep(0.2)
+GPIO.output(RESET_PIN, 0)
+#time.sleep(5)
+
 
 print("Server listening on Port " + str(PORT))
 
@@ -35,8 +44,11 @@ async def consumer_handler(websocket):
 
 async def producer_handler(websocket):
   while True:
-    message = await producer()
-    await websocket.send(message)
+    try:
+      message = await producer()
+      await websocket.send(message)
+    except Exception:
+      break
 
 async def handler(websocket):
   connected.add(websocket)
