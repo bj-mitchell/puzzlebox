@@ -13,6 +13,9 @@ I2C_BUS = 1
 I2C_SLAVE = 0x2a
 INTERRUPT_PIN = 17
 RESET_PIN = 18
+
+GPIO.setwarnings(False)
+
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(INTERRUPT_PIN, GPIO.IN)
 GPIO.setup(RESET_PIN, GPIO.OUT)
@@ -43,6 +46,7 @@ async def consumer_handler(websocket):
         await consumer(message)
 
 async def producer_handler(websocket):
+#  await websocket.send("Startup of raspberry pi server script")
   while True:
     try:
       message = await producer()
