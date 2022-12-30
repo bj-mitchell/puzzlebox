@@ -1,23 +1,27 @@
-﻿//using Microsoft.AspNetCore.Builder;
 using System.Net.WebSockets;
+using System.Net;
+using System.Reflection;
+using System.Text;
 
 namespace WebSocketServer
 {
-    internal class Program
+    public class Program
     {
-        static void Main(string[] args)
+        private static int PORT = 7777;
+
+        public static async Task Main(string[] args)
         {
+            var builder = WebApplication.CreateBuilder(args);
 
-            var builder = WebApplication.CreateBuilder();
-            //builder.WebHost.UseUrls("http://localhost:6666");
-            //var app = builder.Build();
-            var WebsocketOptions = new WebSocketOptions
-            {
+            //builder.Urls.Add("http://*:3000");
 
-            };
+            var app = builder.Build();
+
+            app.Urls.Add("http://*:" + PORT);
 
             app.UseWebSockets();
-            app.Map("/ws", async context =>
+
+            app.Map("/", async context =>
             {
                 if (context.WebSockets.IsWebSocketRequest)
                 {
@@ -25,7 +29,8 @@ namespace WebSocketServer
                     {
                         while (true)
                         {
-                            await webSocket.SendAsync(Encoding.ASCII.GetBytes($"Test - {DateTime.Now}"), WebSocketMessageType.Text, true, CancellationToken.None);
+                            //await webSocket.SendAsync(Encoding.ASCII.GetBytes($"Test - {DateTime.Now}"), WebSocketMessageType.Text, true, CancellationToken.None);
+                            await webSocket.SendAsync(Encoding.ASCII.GetBytes($"Test - {DateTime.Now}"), WebSocketMessageType.Binary, true, CancellationToken.None);
                             await Task.Delay(1000);
                         }
                     }
@@ -35,6 +40,10 @@ namespace WebSocketServer
                     context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 }
             });
+
+
+            //app.MapGet("/", () => "Hello World!");
+
             await app.RunAsync();
         }
     }

@@ -125,20 +125,24 @@ public class LightsController : MonoBehaviour
 
     private void Client_onData(ArraySegment<byte> obj)
     {
+        Debug.Log("inside onData()");
         string message = System.Text.Encoding.Default.GetString(obj);
         Debug.Log("onData: " + message);
 
+        /*var index = Array.FindIndex(lights, element => element.Character == message[0]);
+        int col = (index / matrixWidth);
+        int row = (index % matrixWidth);
+
+        LightSpreadHandler(col, row);
+        */
+
+
         //var light = Array.Find(lights, element => element.Character == message[0]);
-        var index = Array.FindIndex(lights, element => element.Character == message[0]);
 
         //Debug.Log(index);
 
 
         //Debug.Log("mod=" + (index % matrixWidth) + "; " + "col=" + (index / matrixWidth));
-        int col = (index / matrixWidth);
-        int row = (index % matrixWidth);
-
-        LightSpreadHandler(col, row);
         //Debug.Log("x=" + x + "; " + "y=" + y);
         /*if (index < matrixWidth)
         {
@@ -163,7 +167,7 @@ public class LightsController : MonoBehaviour
 
     private void Client_onConnect()
     {
-        Debug.Log("onConnect...");
+        Debug.Log("onConnect()... : " + builder.Uri);
         //throw new NotImplementedException();
 
 
