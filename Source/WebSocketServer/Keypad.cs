@@ -55,5 +55,10 @@ namespace WebSocketServer
     public class KeypadEventArgs : EventArgs
     {
         public char KeyPressed { get; set; }
+        public string Json { get; set; }
+
+        public KeypadEventArgs() {
+            Json = "{ event: 'keypad', data: '" + KeyPressed + "'}";
+        }
     }
 }
