@@ -28,8 +28,6 @@ namespace WebSocketServer
 
             app.UseWebSockets();
 
-            
-
             app.Map("/", async context =>
             {
                 if (context.WebSockets.IsWebSocketRequest)
@@ -40,8 +38,8 @@ namespace WebSocketServer
                         keypad.OnKeypadButtonPress += Keypad_OnKeypadButtonPress;
                         while (true)
                         {
-                            await webSocket.SendAsync(Encoding.ASCII.GetBytes($"Test - {DateTime.Now}"), WebSocketMessageType.Binary, true, CancellationToken.None);
-                            await Task.Delay(1000);
+                            await webSocket.SendAsync(Encoding.ASCII.GetBytes("{ event: 'keepalive', data: '" + DateTime.Now + "' }"), WebSocketMessageType.Binary, true, CancellationToken.None);
+                            await Task.Delay(15000);
                         }
                     }
                 }
@@ -54,13 +52,10 @@ namespace WebSocketServer
             await app.RunAsync();
         }
 
-        
-
         private async static void Keypad_OnKeypadButtonPress(object sender, KeypadEventArgs args)
         {
             var keypad = (Keypad)sender;
-            await keypad.WebSocket.SendAsync(Encoding.ASCII.GetBytes($"Test from OnKeypadPress - {DateTime.Now}"), WebSocketMessageType.Binary, true, CancellationToken.None);
-            Console.WriteLine("Need to send client pressed key:  " + args.KeyPressed);
+            await keypad.WebSocket.SendAsync(Encoding.ASCII.GetBytes("{ event: 'keypad', data: '" + args.KeyPressed + "' }"), WebSocketMessageType.Binary, true, CancellationToken.None);
         }
     }
 }
