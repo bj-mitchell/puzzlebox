@@ -1,5 +1,6 @@
 ﻿using System.Device.Gpio;
 using System.Device.I2c;
+using System.Text;
 
 namespace WebSocketServer
 {
@@ -9,7 +10,7 @@ namespace WebSocketServer
     {
         //public event KeypadNotify OnKeypadButtonPress;
 
-        private I2cDevice? keypad = null;
+        private I2cDevice keypad;
         private readonly GpioController gpio;
         private const int I2C_BUS = 1;
         private const int I2C_ADDRESS = 0x2a;
@@ -19,8 +20,11 @@ namespace WebSocketServer
         public Keypad(GpioController gpio)
         {
             this.gpio = gpio;
-            Setup();
             Reset();
+
+            keypad = I2cDevice.Create(new I2cConnectionSettings(I2C_BUS, I2C_ADDRESS));
+            gpio.OpenPin(INTERRUPT_PIN, PinMode.Input);
+            gpio.OpenPin(RESET_PIN, PinMode.Output);
             gpio.RegisterCallbackForPinValueChangedEvent(INTERRUPT_PIN, PinEventTypes.Rising, OnInterruptEvent);
         }
         
@@ -32,16 +36,13 @@ namespace WebSocketServer
             gpio.Write(RESET_PIN, 0);
         }
 
-        private void Setup()
-        {
-            keypad = I2cDevice.Create(new I2cConnectionSettings(I2C_BUS, I2C_ADDRESS));
-            gpio.OpenPin(INTERRUPT_PIN, PinMode.Input);
-            gpio.OpenPin(RESET_PIN, PinMode.Output);
-        }
-
-        private static void OnInterruptEvent(object sender, PinValueChangedEventArgs pinValueChangedEventArgs)
+        private void OnInterruptEvent(object sender, PinValueChangedEventArgs pinValueChangedEventArgs)
         {
             Console.WriteLine("GOT A INTERRUPT EVENT");
+            var read = keypad.ReadByte();
+            byte[] bytes = new byte[1];
+            bytes[0] = read;
+            Console.WriteLine(ASCIIEncoding.UTF8.GetString(bytes));
         }
 
     }
