@@ -46,8 +46,9 @@ namespace WebSocketServer
             var read = keypad.ReadByte();
             byte[] bytes = new byte[1];
             bytes[0] = read;
-            Console.WriteLine("Keypad key pressed:  " + ASCIIEncoding.UTF8.GetString(bytes));
-            OnKeypadButtonPress(this, new KeypadEventArgs { KeyPressed = ASCIIEncoding.UTF8.GetString(bytes)[0] });
+            KeypadEventArgs keypad_args = new KeypadEventArgs(ASCIIEncoding.UTF8.GetString(bytes)[0]);
+            Console.WriteLine("Keypad key pressed:  " + keypad_args.KeyPressed);
+            OnKeypadButtonPress(this, keypad_args);
         }
 
     }
@@ -57,7 +58,8 @@ namespace WebSocketServer
         public char KeyPressed { get; set; }
         public string Json { get; set; }
 
-        public KeypadEventArgs() {
+        public KeypadEventArgs(char keyPressed) {
+            KeyPressed = keyPressed;
             Json = "{ event: 'keypad', data: '" + KeyPressed + "'}";
         }
     }
