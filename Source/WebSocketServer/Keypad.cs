@@ -10,7 +10,7 @@ namespace WebSocketServer
     public class Keypad
     {
         public event KeypadNotify OnKeypadButtonPress = delegate { };
-        public WebSocket WebSocket { get; set;}
+        public WebSocket? WebSocket { get; set;}
 
         private readonly I2cDevice keypad;
         private readonly GpioController gpio;
