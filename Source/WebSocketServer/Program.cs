@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Text;
 using System.Device.Gpio;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Concurrent;
 
 namespace WebSocketServer
 {
@@ -17,7 +18,7 @@ namespace WebSocketServer
 
             var keypad = new Keypad(gpio);
 
-            keypad.OnKeypadButtonPress += Keypad_OnKeypadButtonPress;
+            //keypad.OnKeypadButtonPress += Keypad_OnKeypadButtonPress;
             
             var builder = WebApplication.CreateBuilder(args);
 
@@ -27,12 +28,16 @@ namespace WebSocketServer
 
             app.UseWebSockets();
 
+            
+
             app.Map("/", async context =>
             {
                 if (context.WebSockets.IsWebSocketRequest)
                 {
                     using (var webSocket = await context.WebSockets.AcceptWebSocketAsync())
                     {
+                        keypad.WebSocket = webSocket;
+                        keypad.OnKeypadButtonPress += Keypad_OnKeypadButtonPress;
                         while (true)
                         {
                             await webSocket.SendAsync(Encoding.ASCII.GetBytes($"Test - {DateTime.Now}"), WebSocketMessageType.Binary, true, CancellationToken.None);
@@ -49,8 +54,12 @@ namespace WebSocketServer
             await app.RunAsync();
         }
 
-        private static void Keypad_OnKeypadButtonPress(KeypadEventArgs args)
+        
+
+        private async static void Keypad_OnKeypadButtonPress(object sender, KeypadEventArgs args)
         {
+            var keypad = (Keypad)sender;
+            await keypad.WebSocket.SendAsync(Encoding.ASCII.GetBytes($"Test from OnKeypadPress - {DateTime.Now}"), WebSocketMessageType.Binary, true, CancellationToken.None);
             Console.WriteLine("Need to send client pressed key:  " + args.KeyPressed);
         }
     }

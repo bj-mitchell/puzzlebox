@@ -1,14 +1,16 @@
 ﻿using System.Device.Gpio;
 using System.Device.I2c;
+using System.Net.WebSockets;
 using System.Text;
 
 namespace WebSocketServer
 {
-    public delegate void KeypadNotify(KeypadEventArgs args);
+    public delegate void KeypadNotify(object sender, KeypadEventArgs args);
 
     public class Keypad
     {
         public event KeypadNotify OnKeypadButtonPress = delegate { };
+        public WebSocket WebSocket { get; set;}
 
         private readonly I2cDevice keypad;
         private readonly GpioController gpio;
@@ -45,7 +47,7 @@ namespace WebSocketServer
             byte[] bytes = new byte[1];
             bytes[0] = read;
             Console.WriteLine("Keypad key pressed:  " + ASCIIEncoding.UTF8.GetString(bytes));
-            OnKeypadButtonPress(new KeypadEventArgs { KeyPressed = ASCIIEncoding.UTF8.GetString(bytes)[0] });
+            OnKeypadButtonPress(this, new KeypadEventArgs { KeyPressed = ASCIIEncoding.UTF8.GetString(bytes)[0] });
         }
 
     }
