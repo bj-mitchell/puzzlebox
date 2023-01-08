@@ -2,15 +2,21 @@ using System.Net.WebSockets;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Device.Gpio;
 
 namespace WebSocketServer
 {
     public class Program
     {
         private static int PORT = 7777;
-
+        
+        
         public static async Task Main(string[] args)
         {
+            using var gpio = new GpioController();
+
+            var keypad = new Keypad(gpio);
+
             var builder = WebApplication.CreateBuilder(args);
 
             //builder.Urls.Add("http://*:3000");
