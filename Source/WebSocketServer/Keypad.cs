@@ -8,7 +8,7 @@ namespace WebSocketServer
 
     public class Keypad
     {
-        //public event KeypadNotify OnKeypadButtonPress;
+        public event KeypadNotify? OnKeypadButtonPress;
 
         private I2cDevice keypad;
         private readonly GpioController gpio;
@@ -37,16 +37,15 @@ namespace WebSocketServer
             gpio.Write(RESET_PIN, 1);
             Thread.Sleep(200);
             gpio.Write(RESET_PIN, 0);
-            //Thread.Sleep(200);
         }
 
         private void OnInterruptEvent(object sender, PinValueChangedEventArgs pinValueChangedEventArgs)
         {
-            Console.WriteLine("GOT A INTERRUPT EVENT");
             var read = keypad.ReadByte();
             byte[] bytes = new byte[1];
             bytes[0] = read;
-            Console.WriteLine(ASCIIEncoding.UTF8.GetString(bytes));
+            Console.WriteLine("Keypad key pressed:  " + ASCIIEncoding.UTF8.GetString(bytes));
+            OnKeypadButtonPress?.Invoke();
         }
 
     }

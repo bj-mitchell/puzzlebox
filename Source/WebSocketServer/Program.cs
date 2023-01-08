@@ -3,6 +3,7 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Device.Gpio;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebSocketServer
 {
@@ -10,16 +11,15 @@ namespace WebSocketServer
     {
         private static int PORT = 7777;
         
-        
         public static async Task Main(string[] args)
         {
             using var gpio = new GpioController();
 
             var keypad = new Keypad(gpio);
 
-            var builder = WebApplication.CreateBuilder(args);
+            keypad.OnKeypadButtonPress += Keypad_OnKeypadButtonPress;
 
-            //builder.Urls.Add("http://*:3000");
+            var builder = WebApplication.CreateBuilder(args);
 
             var app = builder.Build();
 
@@ -35,7 +35,6 @@ namespace WebSocketServer
                     {
                         while (true)
                         {
-                            //await webSocket.SendAsync(Encoding.ASCII.GetBytes($"Test - {DateTime.Now}"), WebSocketMessageType.Text, true, CancellationToken.None);
                             await webSocket.SendAsync(Encoding.ASCII.GetBytes($"Test - {DateTime.Now}"), WebSocketMessageType.Binary, true, CancellationToken.None);
                             await Task.Delay(1000);
                         }
@@ -47,10 +46,13 @@ namespace WebSocketServer
                 }
             });
 
-
-            //app.MapGet("/", () => "Hello World!");
-
             await app.RunAsync();
+        }
+
+        private static void Keypad_OnKeypadButtonPress()
+        {
+            Console.WriteLine("Need to send to clients here");
+
         }
     }
 }
