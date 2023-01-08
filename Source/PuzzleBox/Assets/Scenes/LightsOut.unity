@@ -1411,8 +1411,10 @@ MonoBehaviour:
   - {fileID: 806033317}
   - {fileID: 82272411}
   - {fileID: 1658131412}
+  matrixWidth: 4
+  matrixHeight: 4
   scheme: ws
-  host: raspberrypi
+  host: localhost
   port: 7777
 --- !u!1001 &1856998073
 PrefabInstance:
