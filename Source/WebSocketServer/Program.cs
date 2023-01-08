@@ -18,7 +18,7 @@ namespace WebSocketServer
             var keypad = new Keypad(gpio);
 
             keypad.OnKeypadButtonPress += Keypad_OnKeypadButtonPress;
-
+            
             var builder = WebApplication.CreateBuilder(args);
 
             var app = builder.Build();
@@ -49,10 +49,9 @@ namespace WebSocketServer
             await app.RunAsync();
         }
 
-        private static void Keypad_OnKeypadButtonPress()
+        private static void Keypad_OnKeypadButtonPress(KeypadEventArgs args)
         {
-            Console.WriteLine("Need to send to clients here");
-
+            Console.WriteLine("Need to send client pressed key:  " + args.KeyPressed);
         }
     }
 }
