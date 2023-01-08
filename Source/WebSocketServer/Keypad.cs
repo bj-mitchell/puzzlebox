@@ -20,14 +20,15 @@ namespace WebSocketServer
         public Keypad(GpioController gpio)
         {
             this.gpio = gpio;
-            Reset();
-
+            
             keypad = I2cDevice.Create(new I2cConnectionSettings(I2C_BUS, I2C_ADDRESS));
             gpio.OpenPin(INTERRUPT_PIN, PinMode.Input);
             gpio.OpenPin(RESET_PIN, PinMode.Output);
             gpio.RegisterCallbackForPinValueChangedEvent(INTERRUPT_PIN, PinEventTypes.Rising, OnInterruptEvent);
+
+            Reset();
         }
-        
+
         private void Reset()
         {
             Console.WriteLine("Resetting keypad controller...");
