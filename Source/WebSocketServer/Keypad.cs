@@ -24,9 +24,11 @@ namespace WebSocketServer
             keypad = I2cDevice.Create(new I2cConnectionSettings(I2C_BUS, I2C_ADDRESS));
             gpio.OpenPin(INTERRUPT_PIN, PinMode.Input);
             gpio.OpenPin(RESET_PIN, PinMode.Output);
-            gpio.RegisterCallbackForPinValueChangedEvent(INTERRUPT_PIN, PinEventTypes.Rising, OnInterruptEvent);
 
             Reset();
+
+            gpio.RegisterCallbackForPinValueChangedEvent(INTERRUPT_PIN, PinEventTypes.Rising, OnInterruptEvent);
+            
         }
 
         private void Reset()
@@ -35,6 +37,7 @@ namespace WebSocketServer
             gpio.Write(RESET_PIN, 1);
             Thread.Sleep(200);
             gpio.Write(RESET_PIN, 0);
+            //Thread.Sleep(200);
         }
 
         private void OnInterruptEvent(object sender, PinValueChangedEventArgs pinValueChangedEventArgs)
