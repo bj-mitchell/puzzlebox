@@ -15,8 +15,8 @@ namespace Assets.ScriptableObjects
     [Serializable]
     public class WebSocketMessage
     {
-        public MessageType Type { get; set; }
+        public MessageType Type;
 
-        public string Data { get; set; }
+        public string Data;
     }
 }

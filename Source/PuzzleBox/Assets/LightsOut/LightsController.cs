@@ -62,11 +62,6 @@ public class LightsController : MonoBehaviour
         }
     }
 
-    public void OnKeyPress(WebSocketMessage message)
-    {
-        Debug.Log("HERE: " + message.Type + ": " + message.Data);
-    }
-
     /*private void RandomizeLights()
     {
         
@@ -132,38 +127,56 @@ public class LightsController : MonoBehaviour
 
     //private void Client_onData(ArraySegment<byte> obj)
     //{
-        //Debug.Log("inside onData()");
-        //string message = System.Text.Encoding.Default.GetString(obj);
-        //Debug.Log("onData: " + message);
+    //Debug.Log("inside onData()");
+    //string message = System.Text.Encoding.Default.GetString(obj);
+    //Debug.Log("onData: " + message);
 
-        /*var index = Array.FindIndex(lights, element => element.Character == message[0]);
-        int col = (index / matrixWidth);
-        int row = (index % matrixWidth);
+    /*var index = Array.FindIndex(lights, element => element.Character == message[0]);
+    int col = (index / matrixWidth);
+    int row = (index % matrixWidth);
 
-        LightSpreadHandler(col, row);
-        */
-
-
-        //var light = Array.Find(lights, element => element.Character == message[0]);
-
-        //Debug.Log(index);
+    LightSpreadHandler(col, row);
+    */
 
 
-        //Debug.Log("mod=" + (index % matrixWidth) + "; " + "col=" + (index / matrixWidth));
-        //Debug.Log("x=" + x + "; " + "y=" + y);
-        /*if (index < matrixWidth)
-        {
-            Debug.Log("x=" + index + "; y=" + 0);
-        } else {
-            Debug.Log("mod=" + (index % matrixWidth) + "; " + "col=" + (index / matrixWidth));
+    //var light = Array.Find(lights, element => element.Character == message[0]);
 
-        }*/
-        // if greater than matrixwidth then index mod matrixwidth and index divided by matrix width;  divided will be row, mod will be column
+    //Debug.Log(index);
 
-        //light.State = !light.State;
 
-        //throw new NotImplementedException();
+    //Debug.Log("mod=" + (index % matrixWidth) + "; " + "col=" + (index / matrixWidth));
+    //Debug.Log("x=" + x + "; " + "y=" + y);
+    /*if (index < matrixWidth)
+    {
+        Debug.Log("x=" + index + "; y=" + 0);
+    } else {
+        Debug.Log("mod=" + (index % matrixWidth) + "; " + "col=" + (index / matrixWidth));
+
+    }*/
+    // if greater than matrixwidth then index mod matrixwidth and index divided by matrix width;  divided will be row, mod will be column
+
+    //light.State = !light.State;
+
+    //throw new NotImplementedException();
     //}
+
+    public void OnKeyPress(WebSocketMessage message)
+    {
+        //Debug.Log("HERE: " + message.Type + ": " + message.Data);
+        switch (message.Type)
+        {
+            case MessageType.KEYPRESS:
+                var index = Array.FindIndex(lights, element => element.Character == message.Data[0]);
+                int col = (index / matrixWidth);
+                int row = (index % matrixWidth);
+
+                LightSpreadHandler(col, row);
+                break;
+
+            default: break;
+        }
+    }
+
 
     /*private void Client_onDisconnect()
     {
