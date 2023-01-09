@@ -1,3 +1,4 @@
+using Assets.ScriptableObjects;
 using JamesFrowen.SimpleWeb;
 using System;
 using System.Collections;
@@ -56,9 +57,12 @@ public class WebSocketManager : MonoBehaviour
 
     private void Client_onData(ArraySegment<byte> obj)
     {
-        string message = System.Text.Encoding.Default.GetString(obj);
-        Debug.Log("WebSocketManager onData(): " + message);
-        OnKeypadPress.Raise(new Assets.ScriptableObjects.WebSocketMessage() { Type = Assets.ScriptableObjects.MessageType.KEYPRESS, Data = "1" });
+        string json = System.Text.Encoding.Default.GetString(obj);
+        Debug.Log("WebSocketManager onData(): " + json);
+
+        var message = JsonUtility.FromJson<WebSocketMessage>(json);
+
+        OnKeypadPress.Raise(message);
     }
 
     private void Client_onDisconnect()
