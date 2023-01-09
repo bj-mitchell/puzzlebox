@@ -36,7 +36,7 @@ namespace WebSocketServer
                         keypad.OnKeypadButtonPress += Keypad_OnKeypadButtonPress;
                         while (true)
                         {
-                            await webSocket.SendAsync(Encoding.ASCII.GetBytes("{ event: 'keepalive', data: '" + DateTime.Now + "' }"), WebSocketMessageType.Binary, true, CancellationToken.None);
+                            await webSocket.SendAsync(Encoding.ASCII.GetBytes("{ \"Type\": 0, \"Data\": \"" + DateTime.Now + "\" }"), WebSocketMessageType.Binary, true, CancellationToken.None);
                             await Task.Delay(15000);
                         }
                     }
