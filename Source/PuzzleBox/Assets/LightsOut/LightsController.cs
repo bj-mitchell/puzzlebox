@@ -1,3 +1,4 @@
+using Assets.ScriptableObjects;
 using JamesFrowen.SimpleWeb;
 using System;
 using System.Collections;
@@ -12,27 +13,27 @@ public class LightsController : MonoBehaviour
     [SerializeField] private Light [] lights;
     [SerializeField] private int matrixWidth = 4;
     [SerializeField] private int matrixHeight = 4;
-    [SerializeField] private string scheme = "ws";
-    [SerializeField] private string host = "172.16.1.10";
-    [SerializeField] private int port = 7777;
+    //[SerializeField] private string scheme = "ws";
+    //[SerializeField] private string host = "172.16.1.10";
+    //[SerializeField] private int port = 7777;
 
-    private TcpConfig tcpConfig;
-    private SimpleWebClient client;
-    private UriBuilder builder;
+    //private TcpConfig tcpConfig;
+    //private SimpleWebClient client;
+    //private UriBuilder builder;
     private Light[,] matrix;
 
     // Start is called before the first frame update
     void Start()
     {
-        tcpConfig = new TcpConfig(noDelay: false, sendTimeout: 10000, receiveTimeout: 20000);
-        client = SimpleWebClient.Create(ushort.MaxValue, 5000, tcpConfig);
+        //tcpConfig = new TcpConfig(noDelay: false, sendTimeout: 10000, receiveTimeout: 20000);
+        //client = SimpleWebClient.Create(ushort.MaxValue, 5000, tcpConfig);
 
-        client.onConnect += Client_onConnect;
-        client.onDisconnect += Client_onDisconnect;
-        client.onData += Client_onData;
-        client.onError += Client_onError;
+        //client.onConnect += Client_onConnect;
+        //client.onDisconnect += Client_onDisconnect;
+        //client.onData += Client_onData;
+        //client.onError += Client_onError;
 
-        builder = new UriBuilder
+        /*builder = new UriBuilder
         {
             Scheme = scheme,
             Host = host,
@@ -40,6 +41,7 @@ public class LightsController : MonoBehaviour
         };
 
         client.Connect(builder.Uri);
+        */
 
         SetupLights();
 
@@ -60,7 +62,12 @@ public class LightsController : MonoBehaviour
         }
     }
 
-    private void RandomizeLights()
+    public void OnKeyPress(WebSocketMessage message)
+    {
+        Debug.Log("HERE: " + message.Type + ": " + message.Data);
+    }
+
+    /*private void RandomizeLights()
     {
         
         Random.Range(1, 10);
@@ -77,7 +84,7 @@ public class LightsController : MonoBehaviour
             int index = Random.Range(0, lights.Length);
             lights[index].State = true;
         }
-    }
+    }*/
 
     private bool CheckAllLightsOn()
     {
@@ -117,17 +124,17 @@ public class LightsController : MonoBehaviour
         }
     }
 
-    private void Client_onError(Exception obj)
+    /*private void Client_onError(Exception obj)
     {
         Debug.Log("onError...");
         //throw new NotImplementedException();
-    }
+    }*/
 
-    private void Client_onData(ArraySegment<byte> obj)
-    {
-        Debug.Log("inside onData()");
-        string message = System.Text.Encoding.Default.GetString(obj);
-        Debug.Log("onData: " + message);
+    //private void Client_onData(ArraySegment<byte> obj)
+    //{
+        //Debug.Log("inside onData()");
+        //string message = System.Text.Encoding.Default.GetString(obj);
+        //Debug.Log("onData: " + message);
 
         /*var index = Array.FindIndex(lights, element => element.Character == message[0]);
         int col = (index / matrixWidth);
@@ -156,16 +163,16 @@ public class LightsController : MonoBehaviour
         //light.State = !light.State;
 
         //throw new NotImplementedException();
-    }
+    //}
 
-    private void Client_onDisconnect()
+    /*private void Client_onDisconnect()
     {
         Debug.Log("onDisconnect...");
         //throw new NotImplementedException();
         client.Connect(builder.Uri);
-    }
+    }*/
 
-    private void Client_onConnect()
+    /*private void Client_onConnect()
     {
         Debug.Log("onConnect()... : " + builder.Uri);
         //throw new NotImplementedException();
@@ -173,12 +180,12 @@ public class LightsController : MonoBehaviour
 
         
 
-    }
+    }*/
 
     // Update is called once per frame
     void Update()
     {
-        client.ProcessMessageQueue();
+        //client.ProcessMessageQueue();
         /*client.ProcessMessageQueue();
 
         byte[] message = Encoding.ASCII.GetBytes("Hello Server");

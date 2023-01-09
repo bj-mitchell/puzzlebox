@@ -9,20 +9,16 @@ public class WebSocketManager : MonoBehaviour
     [SerializeField] private string scheme = "ws";
     [SerializeField] private string host = "172.16.200.200";
     [SerializeField] private int port = 7777;
-    [SerializeField] private float keepAlive = 5;
-
-    private TcpConfig tcpConfig;
+    [SerializeField] private WebSocketEvent OnKeypadPress;
+    
     private SimpleWebClient client;
     private UriBuilder builder;
 
-    // Start is called before the first frame update
     void Start()
     {
-        //tcpConfig = new TcpConfig(noDelay: true, sendTimeout: 10000, receiveTimeout: 20000);
-        //client = SimpleWebClient.Create(ushort.MaxValue, 5000, tcpConfig);
-        var tcpConfig = new TcpConfig(true, 5000, 5000);
-        client = SimpleWebClient.Create(32000, 500, tcpConfig);
-
+        var tcpConfig = new TcpConfig(noDelay: true, sendTimeout: 10000, receiveTimeout: 20000);
+        client = SimpleWebClient.Create(ushort.MaxValue, 5000, tcpConfig);
+    
         client.onConnect += Client_onConnect;
         client.onDisconnect += Client_onDisconnect;
         client.onData += Client_onData;
@@ -47,7 +43,6 @@ public class WebSocketManager : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.Log("GOT HERE");
             Debug.LogException(ex);
         }
 
@@ -55,25 +50,26 @@ public class WebSocketManager : MonoBehaviour
 
     private void Client_onError(Exception obj)
     {
-        Debug.Log("onError...");
+        Debug.Log("WebSocketManager: onError()");
         Debug.Log(obj.Message);
     }
 
     private void Client_onData(ArraySegment<byte> obj)
     {
         string message = System.Text.Encoding.Default.GetString(obj);
-        Debug.Log("onData: " + message);
+        Debug.Log("WebSocketManager onData(): " + message);
+        OnKeypadPress.Raise(new Assets.ScriptableObjects.WebSocketMessage() { Type = Assets.ScriptableObjects.MessageType.KEYPRESS, Data = "1" });
     }
 
     private void Client_onDisconnect()
     {
-        Debug.Log("Disconnected from " + scheme + "://" + host + ":" + port);
+        Debug.Log("WebSocketManager:  Disconnected from " + scheme + "://" + host + ":" + port);
         Connect();
     }
 
     private void Client_onConnect()
     {
-        Debug.Log("Connected to " + scheme + "://" + host + ":" + port);
+        Debug.Log("WebSocketManager:  Connected to " + scheme + "://" + host + ":" + port);
     }
 
     private void OnDestroy()
@@ -84,10 +80,5 @@ public class WebSocketManager : MonoBehaviour
     void Update()
     {
         client?.ProcessMessageQueue();
-        if (keepAlive < Time.time)
-        {
-            client?.Send(new ArraySegment<byte>(new byte[1] { 0 }));
-            keepAlive = Time.time + 1;
-        }
     }
 }
