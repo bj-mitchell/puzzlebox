@@ -60,7 +60,7 @@ namespace WebSocketServer
 
         public KeypadEventArgs(char keyPressed) {
             KeyPressed = keyPressed;
-            Json = "{ event: 'keypad', data: '" + KeyPressed + "'}";
+            Json = "{ Type: 1, Data: \"" + KeyPressed + "\"}";
         }
     }
 }

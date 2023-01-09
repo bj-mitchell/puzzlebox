@@ -1,4 +1,5 @@
 ﻿using Assets.ScriptableObjects;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,5 +29,5 @@ public class WebSocketEvent : ScriptableObject
     }
 }
 
-[System.Serializable]
+[Serializable]
 public class WebSocketEventMessage : UnityEvent<WebSocketMessage> { }

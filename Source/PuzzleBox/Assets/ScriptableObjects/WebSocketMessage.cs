@@ -12,6 +12,7 @@ namespace Assets.ScriptableObjects
         KEYPRESS = 1
     }
 
+    [Serializable]
     public class WebSocketMessage
     {
         public MessageType Type { get; set; }
