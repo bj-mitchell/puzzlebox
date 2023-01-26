@@ -488,3 +488,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
+*.blend1
