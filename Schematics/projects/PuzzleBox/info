@@ -1,0 +1,136 @@
+{
+  "uuid": "f6a1c761c66c6afe0f179f1d1efc0098",
+  "path": "Offline/PuzzleBox",
+  "name": "PuzzleBox",
+  "content": "",
+  "created_at": "2023-01-27 19:14:29",
+  "updated_at": "2023-01-27 21:21:11",
+  "stick": "",
+  "documents": [
+    {
+      "uuid": "5788c1eedf92f03442b59a93a91e8a49",
+      "title": "Keypad",
+      "description": "",
+      "docType": "1",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "d1967012734640e5b2f2cc1ea764740b": 1,
+        "e691ecce73f74adc83e15434646ffa2d": 1,
+        "ef55ad8c00d44d9e9c861cb9234e511b": 1,
+        "1c2ae128f44e47afa241eda8253341ae": 1,
+        "9b191d091ed640769ad74d2caa7060c6": 1
+      },
+      "BOM": [
+        [
+          "Value",
+          "Quantity",
+          "Package",
+          "Components",
+          "CustomPara"
+        ],
+        [
+          "MH-ET Live ATTiny88[cnc]",
+          1,
+          "MH-EH LIVE ATTINY88[CNC]",
+          "A1",
+          {
+            "BOM_Manufacturer": "",
+            "BOM_Manufacturer Part": "",
+            "BOM_Supplier Part": "",
+            "BOM_Supplier": "",
+            "puuid": "e3668f02970d405f90799f15529b308d",
+            "uuid": "1c2ae128f44e47afa241eda8253341ae"
+          }
+        ],
+        [
+          "Keypad",
+          1,
+          "HDR-F-2.54_1X10",
+          "H1",
+          {
+            "BOM_Supplier Part": "C35445",
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "af1bce44cacb47cda450f7e17ba302b4",
+            "uuid": "e691ecce73f74adc83e15434646ffa2d"
+          }
+        ],
+        [
+          "Raspberry Pi",
+          1,
+          "HDR-M-2.54_2X8",
+          "J1",
+          {
+            "BOM_Supplier Part": "C68234",
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer Part": "",
+            "puuid": "31640b9c0b964cd8b0c5b945380a91fb",
+            "uuid": "ef55ad8c00d44d9e9c861cb9234e511b"
+          }
+        ],
+        [
+          "2N2222A",
+          1,
+          "NPN-2N2222A",
+          "Q2",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Supplier Part": "C358533",
+            "BOM_Manufacturer": "Mauser",
+            "BOM_Manufacturer Part": "2N2222A",
+            "puuid": "8aa449dd47d840db915946d4f0774b93",
+            "uuid": "9b191d091ed640769ad74d2caa7060c6"
+          }
+        ],
+        [
+          "1.1k",
+          1,
+          "R_AXIAL-0.4",
+          "R1",
+          {
+            "BOM_Supplier Part": "",
+            "BOM_Supplier": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "5905db98cde4487fbb177070aa85bbe1",
+            "uuid": "d1967012734640e5b2f2cc1ea764740b"
+          }
+        ]
+      ],
+      "updateTime": 1674872471,
+      "createTime": 1674864869,
+      "histories": [],
+      "created_at": "2023-01-27 19:14:29",
+      "updated_at": "2023-01-27 21:21:11"
+    },
+    {
+      "uuid": "26d85444d410cd2870b5c93f718be007",
+      "puuid": "f6a1c761c66c6afe0f179f1d1efc0098",
+      "title": "PCB_Keypad",
+      "filename": "PCB_Keypad.json",
+      "description": "",
+      "docType": "3",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "8aa449dd47d840db915946d4f0774b93": 1,
+        "af1bce44cacb47cda450f7e17ba302b4": 1,
+        "e3668f02970d405f90799f15529b308d": 1,
+        "31640b9c0b964cd8b0c5b945380a91fb": 1,
+        "5905db98cde4487fbb177070aa85bbe1": 1
+      },
+      "BOM": [],
+      "updateTime": 1674871826,
+      "createTime": 1674871149,
+      "histories": [],
+      "created_at": "2023-01-27 20:59:09",
+      "updated_at": "2023-01-27 21:10:26"
+    }
+  ],
+  "sort": [],
+  "title": "PuzzleBox",
+  "foldername": "PuzzleBox",
+  "schfilename": "PuzzleBox.json",
+  "schfilemtime": 1674872471134
+}

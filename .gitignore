@@ -489,3 +489,4 @@ FodyWeavers.xsd
 *.sln.iml
 
 *.blend1
+/Schematics/offline_projects_backup
